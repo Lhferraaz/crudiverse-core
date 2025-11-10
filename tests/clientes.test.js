@@ -42,7 +42,11 @@ async function testClientesCRUD() {
     
     // Selecionar gênero
     await sleep(500);
-    const generoButton = await driver.findElement(By.css('button[role="combobox"]'));
+    const generoButton = await driver.wait(
+      until.elementLocated(By.id('genero')),
+      5000
+    );
+    await driver.wait(until.elementIsVisible(generoButton), 5000);
     await generoButton.click();
     await sleep(1000);
     const masculinoOption = await driver.wait(

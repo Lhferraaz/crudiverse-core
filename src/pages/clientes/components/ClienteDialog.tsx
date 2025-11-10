@@ -183,7 +183,7 @@ const ClienteDialog = ({ open, onClose, cliente }: ClienteDialogProps) => {
                 onValueChange={(value: any) => setValue("genero", value)}
                 defaultValue={cliente?.genero || "Feminino"}
               >
-                <SelectTrigger>
+                <SelectTrigger id="genero" data-testid="genero-select">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
