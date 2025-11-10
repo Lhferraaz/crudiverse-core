@@ -17,36 +17,55 @@ async function testClientesCRUD() {
     console.log('➕ Abrindo dialog para novo cliente...');
     const btnNovoCliente = await driver.wait(
       until.elementLocated(By.xpath("//button[contains(., 'Novo Cliente')]")),
-      5000
+      10000
     );
     await btnNovoCliente.click();
-    await sleep(1000);
+    await sleep(2000); // Aguardar animação do dialog
     console.log('✅ Dialog aberto\n');
 
     // 3. Preencher formulário
     console.log('📝 Preenchendo formulário...');
     
-    await driver.findElement(By.id('nome')).sendKeys('João');
-    await driver.findElement(By.id('sobrenome')).sendKeys('Silva');
-    await driver.findElement(By.id('telefone_ou_email')).sendKeys('joao@teste.com');
+    // Esperar que os campos estejam visíveis e interativos
+    const nomeInput = await driver.wait(
+      until.elementLocated(By.id('nome')),
+      10000
+    );
+    await driver.wait(until.elementIsVisible(nomeInput), 5000);
+    await nomeInput.sendKeys('João');
+    
+    const sobrenomeInput = await driver.findElement(By.id('sobrenome'));
+    await sobrenomeInput.sendKeys('Silva');
+    
+    const telefoneInput = await driver.findElement(By.id('telefone_ou_email'));
+    await telefoneInput.sendKeys('joao@teste.com');
     
     // Selecionar gênero
-    const generoSelect = await driver.findElement(By.id('genero'));
-    await generoSelect.click();
     await sleep(500);
-    const masculinoOption = await driver.findElement(By.xpath("//div[@role='option'][contains(., 'Masculino')]"));
+    const generoButton = await driver.findElement(By.css('button[role="combobox"]'));
+    await generoButton.click();
+    await sleep(1000);
+    const masculinoOption = await driver.wait(
+      until.elementLocated(By.xpath("//div[@role='option'][contains(text(), 'Masculino')]")),
+      5000
+    );
     await masculinoOption.click();
     await sleep(500);
 
     // Data de nascimento
-    await driver.findElement(By.id('data_nascimento')).sendKeys('15/03/1990');
+    const dataInput = await driver.findElement(By.id('data_nascimento'));
+    await dataInput.sendKeys('15/03/1990');
     
     // Senha
-    await driver.findElement(By.id('senha')).sendKeys('Senha123!');
+    const senhaInput = await driver.findElement(By.id('senha'));
+    await senhaInput.sendKeys('Senha123!');
     
     // Campos opcionais
-    await driver.findElement(By.id('cidade')).sendKeys('Belo Horizonte');
-    await driver.findElement(By.id('bairro')).sendKeys('Centro');
+    const cidadeInput = await driver.findElement(By.id('cidade'));
+    await cidadeInput.sendKeys('Belo Horizonte');
+    
+    const bairroInput = await driver.findElement(By.id('bairro'));
+    await bairroInput.sendKeys('Centro');
     
     console.log('✅ Formulário preenchido\n');
 
@@ -67,7 +86,11 @@ async function testClientesCRUD() {
 
     // 6. Testar filtros
     console.log('🔎 Testando filtros...');
-    await driver.findElement(By.id('nome')).sendKeys('João');
+    const filtroNome = await driver.wait(
+      until.elementLocated(By.css('input[placeholder*="Nome"]')),
+      5000
+    );
+    await filtroNome.sendKeys('João');
     const btnBuscar = await driver.findElement(By.xpath("//button[contains(., 'Buscar')]"));
     await btnBuscar.click();
     await sleep(2000);
@@ -75,13 +98,19 @@ async function testClientesCRUD() {
 
     // 7. Editar cliente
     console.log('✏️ Editando cliente...');
-    const btnEditar = await driver.findElement(By.xpath("//button[contains(@class, 'outline')]//svg[contains(@class, 'lucide-pencil')]//ancestor::button"));
-    await btnEditar.click();
-    await sleep(1000);
+    const btnEditar = await driver.wait(
+      until.elementLocated(By.css('button[variant="outline"] svg.lucide-pencil')),
+      5000
+    );
+    await driver.executeScript("arguments[0].closest('button').click();", btnEditar);
+    await sleep(2000);
     
-    const cidadeInput = await driver.findElement(By.id('cidade'));
-    await cidadeInput.clear();
-    await cidadeInput.sendKeys('São Paulo');
+    const cidadeEditInput = await driver.wait(
+      until.elementLocated(By.id('cidade')),
+      5000
+    );
+    await cidadeEditInput.clear();
+    await cidadeEditInput.sendKeys('São Paulo');
     
     const btnSalvarEdicao = await driver.findElement(By.xpath("//button[contains(., 'Salvar')]"));
     await btnSalvarEdicao.click();
@@ -90,12 +119,16 @@ async function testClientesCRUD() {
 
     // 8. Deletar cliente
     console.log('🗑️ Deletando cliente...');
-    const btnDeletar = await driver.findElement(By.xpath("//button[contains(@class, 'outline')]//svg[contains(@class, 'lucide-trash')]//ancestor::button"));
-    await btnDeletar.click();
-    await sleep(500);
+    const btnDeletar = await driver.wait(
+      until.elementLocated(By.css('button[variant="outline"] svg.lucide-trash-2')),
+      5000
+    );
+    await driver.executeScript("arguments[0].closest('button').click();", btnDeletar);
+    await sleep(1000);
     
     // Confirmar no alert do navegador
-    await driver.switchTo().alert().accept();
+    const alert = await driver.wait(until.alertIsPresent(), 5000);
+    await alert.accept();
     await sleep(2000);
     console.log('✅ Cliente deletado\n');
 

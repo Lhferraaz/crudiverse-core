@@ -18,46 +18,71 @@ async function testProdutosCRUD() {
     console.log('➕ Abrindo dialog para novo produto...');
     const btnNovoProduto = await driver.wait(
       until.elementLocated(By.xpath("//button[contains(., 'Novo Produto')]")),
-      5000
+      10000
     );
     await btnNovoProduto.click();
-    await sleep(1000);
+    await sleep(2000); // Aguardar animação do dialog
     console.log('✅ Dialog aberto\n');
 
     // 3. Preencher formulário
     console.log('📝 Preenchendo formulário...');
     
-    await driver.findElement(By.id('nome_produto')).sendKeys('Camiseta Básica');
-    await driver.findElement(By.id('tipo')).sendKeys('Camiseta');
-    await driver.findElement(By.id('caracteristicas')).sendKeys('Algodão, Confortável, Básica');
+    // Esperar que os campos estejam visíveis e interativos
+    const nomeInput = await driver.wait(
+      until.elementLocated(By.id('nome_produto')),
+      10000
+    );
+    await driver.wait(until.elementIsVisible(nomeInput), 5000);
+    await nomeInput.sendKeys('Camiseta Básica');
+    
+    const tipoInput = await driver.findElement(By.id('tipo'));
+    await tipoInput.sendKeys('Camiseta');
+    
+    const caracInput = await driver.findElement(By.id('caracteristicas'));
+    await caracInput.sendKeys('Algodão, Confortável, Básica');
     
     // Selecionar marca
-    const marcaSelect = await driver.findElement(By.xpath("//button[@role='combobox' and contains(@aria-label, 'marca')]"));
-    await marcaSelect.click();
     await sleep(500);
-    const primeiramarca = await driver.findElement(By.xpath("//div[@role='option'][1]"));
-    await primeiramarca.click();
+    const marcaButton = await driver.wait(
+      until.elementLocated(By.css('button[role="combobox"]')),
+      5000
+    );
+    await marcaButton.click();
+    await sleep(1000);
+    const primeiraMarca = await driver.wait(
+      until.elementLocated(By.css('div[role="option"]')),
+      5000
+    );
+    await primeiraMarca.click();
     await sleep(500);
 
-    await driver.findElement(By.id('tamanho')).sendKeys('M');
+    // Campos de texto
+    const tamanhoInput = await driver.findElement(By.id('tamanho'));
+    await tamanhoInput.sendKeys('M');
     
     // Selecionar cores (múltiplas)
-    const corSelect = await driver.findElement(By.xpath("//select[@id='cor']"));
-    await corSelect.click();
+    const corSelect = await driver.wait(
+      until.elementLocated(By.id('cor')),
+      5000
+    );
+    // Para select múltiplo, usar Actions para Ctrl+Click
+    const actions = driver.actions();
+    const corAzul = await driver.findElement(By.xpath("//option[contains(text(), 'Azul')]"));
+    const corPreto = await driver.findElement(By.xpath("//option[contains(text(), 'Preto')]"));
+    await actions.keyDown(driver.Key.CONTROL).click(corAzul).click(corPreto).keyUp(driver.Key.CONTROL).perform();
     await sleep(500);
-    const corAzul = await driver.findElement(By.xpath("//option[contains(., 'Azul')]"));
-    const corPreto = await driver.findElement(By.xpath("//option[contains(., 'Preto')]"));
-    await corAzul.click();
-    await corPreto.click();
     
     // Preço
-    await driver.findElement(By.id('preco')).sendKeys('49.90');
+    const precoInput = await driver.findElement(By.id('preco'));
+    await precoInput.sendKeys('49.90');
     
     // Quantidade
-    await driver.findElement(By.id('quantidade_estoque')).sendKeys('100');
+    const quantidadeInput = await driver.findElement(By.id('quantidade_estoque'));
+    await quantidadeInput.sendKeys('100');
     
     // Tecido
-    await driver.findElement(By.id('tecido')).sendKeys('100% Algodão');
+    const tecidoInput = await driver.findElement(By.id('tecido'));
+    await tecidoInput.sendKeys('100% Algodão');
     
     console.log('✅ Formulário preenchido\n');
     console.log('⚠️ NOTA: Upload de imagem precisa ser testado manualmente\n');
@@ -79,7 +104,11 @@ async function testProdutosCRUD() {
 
     // 6. Testar filtros
     console.log('🔎 Testando filtros...');
-    await driver.findElement(By.id('nome_produto')).sendKeys('Camiseta');
+    const filtroNome = await driver.wait(
+      until.elementLocated(By.id('nome_produto')),
+      5000
+    );
+    await filtroNome.sendKeys('Camiseta');
     const btnBuscar = await driver.findElement(By.xpath("//button[contains(., 'Buscar')]"));
     await btnBuscar.click();
     await sleep(2000);
@@ -87,21 +116,29 @@ async function testProdutosCRUD() {
 
     // 7. Testar filtro de preço
     console.log('💰 Testando filtro de preço...');
-    await driver.findElement(By.id('preco_min')).sendKeys('40');
-    await driver.findElement(By.id('preco_max')).sendKeys('60');
+    const precoMinInput = await driver.findElement(By.id('preco_min'));
+    await precoMinInput.sendKeys('40');
+    const precoMaxInput = await driver.findElement(By.id('preco_max'));
+    await precoMaxInput.sendKeys('60');
     await btnBuscar.click();
     await sleep(2000);
     console.log('✅ Filtro de preço aplicado\n');
 
     // 8. Editar produto
     console.log('✏️ Editando produto...');
-    const btnEditar = await driver.findElement(By.xpath("//button[contains(@class, 'outline')]//svg[contains(@class, 'lucide-pencil')]//ancestor::button"));
-    await btnEditar.click();
-    await sleep(1000);
+    const btnEditar = await driver.wait(
+      until.elementLocated(By.css('button[variant="outline"] svg.lucide-pencil')),
+      5000
+    );
+    await driver.executeScript("arguments[0].closest('button').click();", btnEditar);
+    await sleep(2000);
     
-    const precoInput = await driver.findElement(By.id('preco'));
-    await precoInput.clear();
-    await precoInput.sendKeys('59.90');
+    const precoEditInput = await driver.wait(
+      until.elementLocated(By.id('preco')),
+      5000
+    );
+    await precoEditInput.clear();
+    await precoEditInput.sendKeys('59.90');
     
     const btnSalvarEdicao = await driver.findElement(By.xpath("//button[contains(., 'Salvar')]"));
     await btnSalvarEdicao.click();
@@ -110,12 +147,16 @@ async function testProdutosCRUD() {
 
     // 9. Deletar produto
     console.log('🗑️ Deletando produto...');
-    const btnDeletar = await driver.findElement(By.xpath("//button[contains(@class, 'outline')]//svg[contains(@class, 'lucide-trash')]//ancestor::button"));
-    await btnDeletar.click();
-    await sleep(500);
+    const btnDeletar = await driver.wait(
+      until.elementLocated(By.css('button[variant="outline"] svg.lucide-trash-2')),
+      5000
+    );
+    await driver.executeScript("arguments[0].closest('button').click();", btnDeletar);
+    await sleep(1000);
     
     // Confirmar no alert do navegador
-    await driver.switchTo().alert().accept();
+    const alert = await driver.wait(until.alertIsPresent(), 5000);
+    await alert.accept();
     await sleep(2000);
     console.log('✅ Produto deletado\n');
 
