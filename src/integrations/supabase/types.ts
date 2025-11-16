@@ -68,6 +68,60 @@ export type Database = {
         }
         Relationships: []
       }
+      fornecedores: {
+        Row: {
+          bairro: string | null
+          cidade: string
+          cpf_cnpj: string
+          created_at: string
+          email: string | null
+          estado: string
+          id: string
+          nome: string
+          numero: number | null
+          pais: string
+          produtos_fornecidos: string | null
+          rua_avenida: string | null
+          status: string
+          telefone: string | null
+          updated_at: string
+        }
+        Insert: {
+          bairro?: string | null
+          cidade: string
+          cpf_cnpj: string
+          created_at?: string
+          email?: string | null
+          estado: string
+          id?: string
+          nome: string
+          numero?: number | null
+          pais: string
+          produtos_fornecidos?: string | null
+          rua_avenida?: string | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bairro?: string | null
+          cidade?: string
+          cpf_cnpj?: string
+          created_at?: string
+          email?: string | null
+          estado?: string
+          id?: string
+          nome?: string
+          numero?: number | null
+          pais?: string
+          produtos_fornecidos?: string | null
+          rua_avenida?: string | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       marcas: {
         Row: {
           created_at: string
@@ -141,6 +195,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      promocoes: {
+        Row: {
+          aplicar_todos_produtos: boolean
+          codigo_promocional: string | null
+          created_at: string
+          data_inicio: string
+          data_termino: string
+          id: string
+          limite_uso: number | null
+          nome: string
+          produtos_aplicaveis: string[] | null
+          status: string
+          tipo_desconto: string
+          updated_at: string
+          valor_desconto: number
+        }
+        Insert: {
+          aplicar_todos_produtos?: boolean
+          codigo_promocional?: string | null
+          created_at?: string
+          data_inicio: string
+          data_termino: string
+          id?: string
+          limite_uso?: number | null
+          nome: string
+          produtos_aplicaveis?: string[] | null
+          status?: string
+          tipo_desconto: string
+          updated_at?: string
+          valor_desconto: number
+        }
+        Update: {
+          aplicar_todos_produtos?: boolean
+          codigo_promocional?: string | null
+          created_at?: string
+          data_inicio?: string
+          data_termino?: string
+          id?: string
+          limite_uso?: number | null
+          nome?: string
+          produtos_aplicaveis?: string[] | null
+          status?: string
+          tipo_desconto?: string
+          updated_at?: string
+          valor_desconto?: number
+        }
+        Relationships: []
       }
     }
     Views: {
