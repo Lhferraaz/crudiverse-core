@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Users, Package } from "lucide-react";
+import { Users, Package, Truck, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -8,6 +8,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const navItems = [
     { path: "/clientes", label: "Clientes", icon: Users },
     { path: "/produtos", label: "Produtos", icon: Package },
+    { path: "/fornecedores", label: "Fornecedores", icon: Truck },
+    { path: "/promocoes", label: "Promoções", icon: Tag },
   ];
 
   return (
@@ -16,7 +18,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <Link to="/" className="text-xl font-bold text-sidebar-primary-foreground">
-              Sistema CRUD
+              Sistema Loja Online
             </Link>
             <div className="flex space-x-1">
               {navItems.map((item) => {
