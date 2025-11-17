@@ -68,7 +68,6 @@ const ClienteDialog = ({ open, onClose, cliente }: ClienteDialogProps) => {
         telefone_ou_email: "",
         genero: "Feminino",
         data_nascimento: "",
-        senha: "",
         cidade: "",
         bairro: "",
         pais: "",
@@ -96,7 +95,6 @@ const ClienteDialog = ({ open, onClose, cliente }: ClienteDialogProps) => {
         telefone_ou_email: data.telefone_ou_email,
         genero: data.genero,
         data_nascimento: data.data_nascimento,
-        senha: data.senha,
         cidade: data.cidade || null,
         bairro: data.bairro || null,
         pais: data.pais || null,
@@ -210,14 +208,6 @@ const ClienteDialog = ({ open, onClose, cliente }: ClienteDialogProps) => {
                 </p>
               )}
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="senha">Senha *</Label>
-            <Input id="senha" type="password" {...register("senha")} />
-            {errors.senha && (
-              <p className="text-sm text-destructive">{errors.senha.message}</p>
-            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
