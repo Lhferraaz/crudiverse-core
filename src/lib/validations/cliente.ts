@@ -26,14 +26,6 @@ export const clienteSchema = z.object({
     required_error: "Gênero é obrigatório",
   }),
   data_nascimento: z.string().min(1, "Data de nascimento é obrigatória"),
-  senha: z
-    .string()
-    .min(8, "Senha deve ter no mínimo 8 caracteres")
-    .max(40, "Senha deve ter no máximo 40 caracteres")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      "Senha deve conter letra maiúscula, minúscula e número"
-    ),
   cidade: z
     .string()
     .max(30, "Cidade deve ter no máximo 30 caracteres")

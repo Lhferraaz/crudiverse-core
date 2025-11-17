@@ -1,9 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
-import { Users, Package, Truck, Tag } from "lucide-react";
+import { Users, Package, Truck, Tag, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
+  const { signOut, user } = useAuth();
 
   const navItems = [
     { path: "/clientes", label: "Clientes", icon: Users },
@@ -20,7 +23,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <Link to="/" className="text-xl font-bold text-sidebar-primary-foreground">
               Sistema Loja Online
             </Link>
-            <div className="flex space-x-1">
+            <div className="flex items-center space-x-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname.startsWith(item.path);
@@ -40,6 +43,17 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   </Link>
                 );
               })}
+              {user && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => signOut()}
+                  className="ml-2"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sair
+                </Button>
+              )}
             </div>
           </div>
         </div>
