@@ -58,14 +58,14 @@ const FornecedoresFilters = ({ filters, onFiltersChange }: FornecedoresFiltersPr
           <Select
             value={filters.pais}
             onValueChange={(value) =>
-              onFiltersChange({ ...filters, pais: value, estado: "" })
+              onFiltersChange({ ...filters, pais: value === "__EMPTY__" ? "" : value, estado: "" })
             }
           >
             <SelectTrigger id="pais">
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos</SelectItem>
+              <SelectItem value="__EMPTY__">Todos</SelectItem>
               {countries.map((country) => (
                 <SelectItem key={country.code} value={country.name}>
                   {country.name}
@@ -80,14 +80,14 @@ const FornecedoresFilters = ({ filters, onFiltersChange }: FornecedoresFiltersPr
           <Select
             value={filters.estado}
             onValueChange={(value) =>
-              onFiltersChange({ ...filters, estado: value })
+              onFiltersChange({ ...filters, estado: value === "__EMPTY__" ? "" : value })
             }
           >
             <SelectTrigger id="estado">
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos</SelectItem>
+              <SelectItem value="__EMPTY__">Todos</SelectItem>
               {estados.map((estado) => (
                 <SelectItem key={estado} value={estado}>
                   {estado}

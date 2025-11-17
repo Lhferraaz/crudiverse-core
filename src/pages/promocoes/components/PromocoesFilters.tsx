@@ -44,14 +44,14 @@ const PromocoesFilters = ({ filters, onFiltersChange }: PromocoesFiltersProps) =
           <Select
             value={filters.tipo_desconto}
             onValueChange={(value) =>
-              onFiltersChange({ ...filters, tipo_desconto: value })
+              onFiltersChange({ ...filters, tipo_desconto: value === "__EMPTY__" ? "" : value })
             }
           >
             <SelectTrigger id="tipo_desconto">
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos</SelectItem>
+              <SelectItem value="__EMPTY__">Todos</SelectItem>
               <SelectItem value="Percentual">Percentual</SelectItem>
               <SelectItem value="Valor fixo">Valor fixo</SelectItem>
             </SelectContent>
@@ -87,14 +87,14 @@ const PromocoesFilters = ({ filters, onFiltersChange }: PromocoesFiltersProps) =
           <Select
             value={filters.status}
             onValueChange={(value) =>
-              onFiltersChange({ ...filters, status: value })
+              onFiltersChange({ ...filters, status: value === "__EMPTY__" ? "" : value })
             }
           >
             <SelectTrigger id="status">
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos</SelectItem>
+              <SelectItem value="__EMPTY__">Todos</SelectItem>
               <SelectItem value="Ativo">Ativo</SelectItem>
               <SelectItem value="Inativo">Inativo</SelectItem>
             </SelectContent>
